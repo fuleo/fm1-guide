@@ -1,0 +1,8 @@
+title: M-VAVE FM-1 Guide
+description: Practical notes for the M-VAVE FM-1 pocket FM synth — sequencer, effects, and firmware updates from Linux.
+theme: minima
+markdown: kramdown
+header_pages:
+  - sequencer.md
+  - reverb.md
+  - linux-update.md
