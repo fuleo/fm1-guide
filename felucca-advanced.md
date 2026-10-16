@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Felucca advanced
+nav_title: Felucca advanced
 permalink: /felucca-advanced.html
 ---
 

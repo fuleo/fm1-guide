@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Stock sequencer
+nav_title: Stock sequencer
 permalink: /sequencer.html
 ---
 

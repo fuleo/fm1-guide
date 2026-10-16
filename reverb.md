@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Reverb after V15
+nav_title: Reverb
 permalink: /reverb.html
 ---
 

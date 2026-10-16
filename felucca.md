@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Felucca for beginners
+nav_title: Felucca basics
 permalink: /felucca.html
 ---
 
