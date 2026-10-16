@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Update from Linux
+title: Linux updates
 permalink: /linux-update.html
 ---
 
