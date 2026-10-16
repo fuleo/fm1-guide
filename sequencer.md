@@ -5,6 +5,10 @@ permalink: /sequencer.html
 ---
 
 <style>
+.shots{display:flex;flex-wrap:wrap;gap:12px;margin:12px 0 18px}
+.shots figure{margin:0;flex:0 1 228px}
+.shots img{width:228px;max-width:100%;height:auto;border-radius:10px;display:block}
+.shots figcaption{font-size:.85em;color:#666;margin-top:4px;line-height:1.3}
 .fig img{width:100%;max-width:720px;height:auto;border-radius:12px;display:block}
 .fig figcaption{font-size:.85em;color:#666;margin-top:6px}
 .lane{display:flex;gap:3px;margin:6px 0 2px;flex-wrap:wrap}
@@ -20,7 +24,7 @@ This page is for the **stock M-VAVE firmware (V15)**: 16 patterns of 16 steps, w
 
 <div class="note"><b>Running Felucca instead?</b> Its sequencer works completely differently (4 tracks, 64 steps). See <a href="felucca.html">Felucca for beginners</a> and <a href="felucca-advanced.html">Felucca advanced</a>.</div>
 
-> **Sources:** M-VAVE's [user manual](https://manuals.plus/m-vave/fm-1-fm-synthesizer-manual) for the controls, M-VAVE's V15 release note for the V15 features, and M-VAVE's MIDI guide for clock sync. One shortcut comes only from owners and is marked as such. If your FM-1 behaves differently, please [open an issue](https://github.com/fuleo/fm1-guide/issues).
+> **Sources:** the V15 screens in [fm1-emu](https://joakimeriksson.github.io/fm1-emu/), M-VAVE's [user manual](https://manuals.plus/m-vave/fm-1-fm-synthesizer-manual) for the controls, M-VAVE's V15 release note for the V15 features, and M-VAVE's MIDI guide for clock sync. One shortcut comes only from owners and is marked as such. If your FM-1 behaves differently, please [open an issue](https://github.com/fuleo/fm1-guide/issues).
 
 ## The controls you use
 
@@ -32,20 +36,28 @@ This page is for the **stock M-VAVE firmware (V15)**: 16 patterns of 16 steps, w
 | 2 | **KNOB 1–4** | the four settings of the current page (table below) |
 | 3 | **SEQ** | turns the sequencer on or off. The keys then show the 16 steps: lit = has notes, blinking = playing now |
 | 4 | **PLAY/STOP** | starts and stops the pattern |
-| 5 | **ALGORITHM** | hold **OCT−** or **OCT+** and turn it to **transpose** −12 to +12 semitones, also while playing |
+| 5 | **ALGORITHM** | hold **OCT−** or **OCT+** and turn it to **transpose** −12 to +12 semitones, also while playing (SEQ page 3 also has Transpose) |
 | 6 | **REC** | starts and stops recording: each key you press goes into the **next step** |
 | 7 | **OCT− / OCT+** | octave down or up. Press **both** to reset octave and transpose |
 | 8 | **SAVE** | **hold it** to store your patterns, sounds and settings in flash |
 | 9 | **Keys** | play notes into the steps |
 
-**The SEQ pages:**
+**The SEQ pages in V15** (three of them: turn SELECT, and the bottom bar shows 1/3, 2/3 or 3/3). Each card on the screen is the knob in the same place: top-left KNOB 1, top-right KNOB 2, bottom-left KNOB 3, bottom-right KNOB 4.
 
 | Page | KNOB 1 | KNOB 2 | KNOB 3 | KNOB 4 |
 |---|---|---|---|---|
-| **1** | **Pattern** (1–16) | **Clear** (empties the pattern) | **Rate** (note length per step) | **Tempo** (30–300 BPM) |
-| **2** | **Gate** (20–100 %) | **Swing** (50–75 %) | – | – |
+| **1/3** | **Pattern** (1–16) | **Clear** (opens a menu) | **Chain** (1–16) | **Step** (pattern length) |
+| **2/3** | **Voice** (the bound sound) | **Rate** (1/16, 1/8T…) | **Tempo** (BPM) | **Gate** (%) |
+| **3/3** | **Swing** (50 %+) | **Sync** (follow MIDI Clock: OFF/ON) | **Transpose** | – |
 
-V15 adds **Step** and **Chain** to page 1, and **Voice** to page 2. M-VAVE hasn't published where exactly they sit, so turn **SELECT** and look for the names.
+<div class="shots">
+<figure><img src="assets/stock/seq-page1.png" alt="SEQ page 1"><figcaption><b>1/3:</b> Pattern, Clear, Chain, Step.</figcaption></figure>
+<figure><img src="assets/stock/seq-page2.png" alt="SEQ page 2"><figcaption><b>2/3:</b> Voice, Rate, Tempo, Gate.</figcaption></figure>
+<figure><img src="assets/stock/seq-page3.png" alt="SEQ page 3"><figcaption><b>3/3:</b> Swing, Sync, Transpose.</figcaption></figure>
+<figure><img src="assets/stock/seq-clear.png" alt="Clear menu"><figcaption><b>KNOB 2 (Clear)</b> asks first: turn KNOB 3 to clear the step, KNOB 4 to clear the pattern, or KNOB 2 to cancel.</figcaption></figure>
+</div>
+
+<small>Screens of stock V15 running in [fm1-emu](https://joakimeriksson.github.io/fm1-emu/), which runs M-VAVE's own update file. "EMU E.PNO" is the emulator's stand-in patch. M-VAVE's printed manual shows the older 2-page layout.</small>
 
 **ARP and SEQ can't be on together.** Pressing SEQ while the arpeggiator is on shows "Disable ARP to enter". Press ARP to turn it off first, and the same goes the other way round.
 
@@ -53,11 +65,11 @@ V15 adds **Step** and **Chain** to page 1, and **Voice** to page 2. M-VAVE hasn'
 
 1. Press **SEQ**. The SEQ LED and the STOP LED light up.
 2. Turn **KNOB 1** to pick a **Pattern**, for example 1.
-3. To start from empty, turn **KNOB 2 (Clear)**.
+3. To start from empty, turn **KNOB 2 (Clear)**, then **KNOB 4** to clear the pattern.
 4. Press **REC**. REC and PLAY light up and the pattern runs.
 5. Play **16 notes** on the keys, one per step. Each key fills the next step.
 6. Press **REC** again to stop recording. The pattern keeps playing.
-7. Change the feel: **KNOB 4** for tempo, then turn **SELECT** to page 2 for **Gate** (short or long notes) and **Swing**.
+7. Change the feel: turn **SELECT** to page 2 for **Tempo** (KNOB 3) and **Gate** (KNOB 4, short or long notes), and to page 3 for **Swing**.
 8. **Hold SAVE** until "Preset Saved" shows. Otherwise the pattern is gone after a power-off.
 
 <div class="steps">
@@ -85,7 +97,7 @@ Notes already on those steps are kept, not overwritten.
 
 ## Pattern length: Step (V15)
 
-**Step** on SEQ page 1 sets how many of the 16 steps play before the pattern loops.
+**Step** (SEQ page 1, KNOB 4) sets how many of the 16 steps play before the pattern loops.
 
 | Step | Feel |
 |---|---|
@@ -101,7 +113,7 @@ Notes already on those steps are kept, not overwritten.
 
 ## Chain: play patterns in a row (V15)
 
-Normally the sequencer repeats the one pattern you're on. **Chain** (SEQ page 1, 1–16) plays **N patterns in a row, starting from the current one**, then loops back.
+Normally the sequencer repeats the one pattern you're on. **Chain** (SEQ page 1, KNOB 3, 1–16) plays **N patterns in a row, starting from the current one**, then loops back.
 
 **Start on 1, Chain = 4:**
 <div class="lane"><span class="p1">1</span><span class="p2">2</span><span class="p3">3</span><span class="p4">4</span><span class="p1">1</span><span class="p2">2</span><span class="p3">3</span><span class="p4">4</span><span class="loop">…</span></div>
@@ -119,7 +131,7 @@ Normally the sequencer repeats the one pattern you're on. **Chain** (SEQ page 1,
 
 ## Voice binding: a sound per pattern (V15)
 
-**Voice** (SEQ page 2) binds a sound (preset) to the current pattern. Each pattern then plays with its own sound, and within a chain the sound changes by itself as the patterns change. While the sequencer is on, the **PRESETS knob does nothing**, because the pattern chooses the sound.
+**Voice** (SEQ page 2, KNOB 1) binds a sound (preset) to the current pattern. Each pattern then plays with its own sound, and within a chain the sound changes by itself as the patterns change. While the sequencer is on, the **PRESETS knob does nothing**, because the pattern chooses the sound.
 
 <div class="lane"><span class="p1">1 · BASS</span><span class="p2">2 · PAD</span><span class="p3">3 · BASS</span><span class="p1">1 · BASS</span><span class="loop">…</span></div>
 
@@ -147,7 +159,7 @@ Normally the sequencer repeats the one pattern you're on. **Chain** (SEQ page 1,
 **Tips:**
 - For pads, turn the reverb **Decay** up. V15's scale is 0–100, so low numbers are very short; see [the reverb page](reverb.html).
 - **Transpose while it plays** (hold OCT+ or OCT− and turn ALGORITHM) for key changes. Press OCT− and OCT+ together to go back.
-- **Sync to a DAW or drum machine:** the FM-1 follows incoming **MIDI Clock**. Start begins from step 1, and Stop stops. Continue acts like Start, so it restarts rather than resumes.
+- **Sync to a DAW or drum machine:** set **Sync = ON** (SEQ page 3, KNOB 2) and the sequencer follows incoming **MIDI Clock**. Start begins from step 1, and Stop stops. Continue acts like Start, so it restarts rather than resumes.
 
 ## Stock vs custom firmware
 

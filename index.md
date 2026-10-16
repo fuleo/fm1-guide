@@ -15,9 +15,16 @@ title: Home
 .post-content table, .page-content table{display:block;overflow-x:auto;max-width:100%}
 </style>
 
-Practical, tested guides for the **M-VAVE FM-1** pocket synth. They cover the free **Felucca** firmware, the stock firmware, and updating it all from **Linux**. Every step was tried on a real FM-1 or in the firmware's own browser version, and the screenshots are real screens.
+Practical, tested guides for the **M-VAVE FM-1** pocket synth. They cover the free **Felucca** firmware, the stock firmware, and updating it all from **Linux**. Every step was tried on a real FM-1 or in an emulator running the real firmware, and the screenshots are real screens.
 
 <figure class="hero"><img src="assets/felucca/panel.png" alt="The FM-1 panel running Felucca, drawn by Felucca's browser version"><figcaption>The FM-1 running Felucca 1.6.1: four knobs on the left, KNOB 1–4 on the right, 12 buttons and 27 keys.</figcaption></figure>
+
+## Try an FM-1 in your browser
+
+<div class="cards">
+<a class="card" href="https://joakimeriksson.github.io/fm1-emu/?fw=felucca&amp;mhz=100" style="text-decoration:none;color:inherit"><img src="assets/stock/stock-panel.png" alt="fm1-emu emulator" style="image-rendering:auto"><h3>fm1-emu: the whole FM-1, emulated →</h3><p>Joakim Eriksson's emulator of the FM-1's chip runs the <b>real firmware files unchanged</b>: Felucca, SLOOP, X0X and more, or M-VAVE's own V15 if you open its <code>FM-1.fwsc</code>. Keys, knobs, sound and MIDI in. The link starts Felucca at 100 MHz; raise the clock if your computer keeps up.</p></a>
+<a class="card" href="https://hugelton.github.io/Felucca/webapp/try/" style="text-decoration:none;color:inherit"><img src="assets/felucca/home.png" alt="Felucca in the browser"><h3>Felucca in your browser →</h3><p>Felucca's own browser version: the same firmware compiled for the web, with the panel on screen. The screenshots in the Felucca tutorials come from it.</p></a>
+</div>
 
 ## Felucca (custom firmware, free)
 
