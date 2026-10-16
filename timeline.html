@@ -140,6 +140,30 @@ body.listmode #start{display:none}
 #start small{display:block;margin-top:16px;color:var(--dim)}
 #fade{position:fixed;inset:0;z-index:12;background:#05060b;opacity:0;pointer-events:none;transition:opacity .7s}
 #snd.off{opacity:.5}
+/* event images */
+.ci{margin:-10px -12px 9px;border-radius:12px 12px 0 0;overflow:hidden;background:#05060b;position:relative}
+.ci img{display:block;width:100%;height:auto}
+.ci.photo img,.ci.card img{aspect-ratio:16/9;object-fit:cover}
+.ci.screen{display:flex;justify-content:center;padding:10px 0 8px;background:radial-gradient(ellipse at center,#14172b,#05060b)}
+.ci.screen img{width:150px;height:150px;border-radius:8px;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 6px 20px rgba(0,0,0,.5)}
+.ci.wide{padding:10px 10px 8px;background:radial-gradient(ellipse at center,#14172b,#05060b)}
+.ci.wide img{border-radius:8px}
+.ci figcaption,.si-img figcaption,.li-img figcaption{position:absolute;right:6px;bottom:4px;font:500 9px "JetBrains Mono",monospace;color:rgba(230,235,255,.7);
+  background:rgba(5,6,11,.65);padding:2px 5px;border-radius:4px;letter-spacing:.02em}
+.card.minor .ci{float:left;width:30px;height:30px;margin:0 8px 0 0;border-radius:7px;padding:0;background:#05060b}
+.card.minor .ci img{width:30px;height:30px;object-fit:cover;aspect-ratio:auto;border-radius:7px;box-shadow:none}
+.card.minor .ci figcaption{display:none}
+.card.minor{display:flow-root}
+.lg{width:14px;height:14px;border-radius:3px;vertical-align:-3px;margin-right:6px;background:#fff;object-fit:contain}
+.lgt{font-style:normal;font:700 8px "JetBrains Mono",monospace;letter-spacing:.06em;background:#cfd6ff;color:#08090f;padding:1px 4px;border-radius:3px;margin-right:6px}
+.si-img{position:relative;margin:2px 0 8px;border-radius:9px;overflow:hidden;background:#05060b}
+.si-img img{display:block;width:100%;height:auto;max-height:170px;object-fit:cover}
+.si-img.screen,.si-img.wide{display:flex;justify-content:center;padding:8px;background:radial-gradient(ellipse at center,#14172b,#05060b)}
+.si-img.screen img{width:150px;height:150px;border-radius:7px;object-fit:contain}
+.li-img{position:relative;float:right;margin:0 0 8px 14px;width:200px;border-radius:9px;overflow:hidden;background:#05060b}
+.li-img img{display:block;width:100%;height:auto}
+.li-img.screen{width:140px}
+@media (max-width:640px){ .ci.screen img{width:120px;height:120px} .li-img{float:none;margin:6px 0;width:100%} .li-img.screen{width:160px} }
 /* intro + hint */
 #hint{left:50%;bottom:76px;transform:translateX(-50%);font:500 12px "JetBrains Mono",monospace;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;transition:opacity .6s}
 #hint b{color:var(--ink)}
@@ -273,6 +297,10 @@ const E = [
  {d:"2026-10-14",c:"cf",t:"Felucca 1.6.1: engines go MIT",x:"Five engines move to Felucca-Engines under the MIT licence, so other firmwares can reuse them freely, and the second core arrives as an opt-in beta.",s:[["Felucca 1.6.1 notes","https://github.com/hugelton/Felucca/releases/tag/v1.6.1"]]},
  {d:"2026-10-16",c:"cf",m:1,t:"Today: SLOOP 2.7 leads",x:"SLOOP (511★) and Felucca (503★) are neck and neck, with X0X at 170★. Baud Girl is at version 101, and 30+ firmwares and ports exist for a synth that launched in July.",s:[["This guide's scene table","./#the-custom-firmware-scene"]]},
 ];
+// an image per event: our own screens (the real firmware in fm1-emu or Felucca's browser version), the sites' own
+// link-preview images (credited), or GitHub's repo cards; and the source's logo where it has one
+const IMG = [["assets/stock/seq-page2.png", "screen", "Stock V15 in fm1-emu", "assets/timeline/logo-mvave.png"], ["assets/timeline/hw-fm1.jpg", "photo", "Image: Synth Anatomy", "assets/timeline/logo-matrixsynth.png"], ["assets/stock/stock-panel.png", "photo", "Stock firmware in fm1-emu", "assets/timeline/logo-mvave.png"], ["assets/timeline/press-sonicstate-reviews.jpg", "photo", "Image: Sonicstate", "assets/timeline/logo-sonicstate.png"], ["assets/timeline/press-synthtopia.jpg", "photo", "Image: Synthtopia", "txt:SYNTHTOPIA"], ["assets/timeline/gh-al-255_fm-1-re.jpg", "card", "GitHub", ""], ["assets/timeline/gh-aroum_fm1-custom-fw.jpg", "card", "GitHub", ""], ["assets/stock/seq-page1.png", "screen", "Stock V15: Chain and Step in fm1-emu", "assets/timeline/logo-mvave.png"], ["assets/timeline/gh-czietz_fm1-firmware-patcher.jpg", "card", "GitHub", ""], ["assets/timeline/cf-baudgirl.jpg", "photo", "Image: Baud Girl", "assets/timeline/logo-baudgirl.svg"], ["assets/timeline/press-sonicstate-cfw.jpg", "photo", "Image: Sonicstate", "assets/timeline/logo-sonicstate.png"], ["assets/timeline/gh-kurogedelic_fm-1-transporter.jpg", "card", "GitHub", ""], ["assets/timeline/fw-felucca.png", "screen", "Felucca (1.6.1) in fm1-emu", ""], ["assets/timeline/fw-sloop.png", "screen", "SLOOP (2.6) in fm1-emu", ""], ["assets/timeline/fw-x0x.png", "screen", "X0X (1.1) in fm1-emu", ""], ["assets/timeline/cf-grooveos.jpg", "photo", "Image: Synth Anatomy", "assets/timeline/logo-synthanatomy.png"], ["assets/timeline/fw-jangada.png", "screen", "Jangada (1.0) in fm1-emu", ""], ["assets/timeline/gh-simonjohansson_fm1-emulator.jpg", "card", "GitHub", ""], ["assets/timeline/cf-felucca10.jpg", "photo", "Image: Synth Anatomy", "assets/timeline/logo-synthanatomy.png"], ["assets/timeline/gh-cicloid_awesome-fm-1.jpg", "card", "GitHub", ""], ["assets/timeline/press-timetohouse.jpg", "photo", "Image: Time To House", "assets/timeline/logo-timetohouse.png"], ["assets/timeline/fw-fomni.png", "screen", "FoMni (0.4) in fm1-emu", ""], ["assets/timeline/fw-melodee.png", "screen", "Melodee (1.3.6) in fm1-emu", ""], ["assets/timeline/cf-baudgirl-sa.jpg", "photo", "Image: Synth Anatomy", "assets/timeline/logo-baudgirl.svg"], ["assets/timeline/fw-zp12-orbit.png", "wide", "zp12 and ORBIT in fm1-emu", ""], ["assets/timeline/fw-fimba.png", "screen", "FiMba-1 in fm1-emu", ""], ["assets/timeline/gh-quixotic7_fm1vst.jpg", "card", "GitHub", ""], ["assets/felucca/song.png", "screen", "Felucca's SONG lanes (1.6.1)", ""], ["assets/timeline/smk-baudgirl.jpg", "photo", "Image: Baud Girl", "assets/timeline/logo-baudgirl.svg"], ["assets/timeline/fw-dinghy.png", "screen", "Dinghy in fm1-emu", ""], ["assets/timeline/fw-doom.png", "screen", "FM-1 Doom in fm1-emu", ""], ["assets/timeline/fw-x0x-boot.png", "screen", "X0X in fm1-emu", ""], ["assets/timeline/fw-fm106.png", "screen", "FM-106 in fm1-emu", ""], ["assets/timeline/tool-fm1emu.jpg", "photo", "fm1-emu running Felucca", ""], ["assets/timeline/cf-baudgirl.jpg", "photo", "Image: Baud Girl", "assets/timeline/logo-baudgirl.svg"], ["assets/felucca-adv/cond-1-2.png", "screen", "Felucca: a 1:2 condition", ""], ["assets/timeline/gh-hugelton_felucca-engines.jpg", "card", "GitHub", ""], ["assets/timeline/fw-sloop-boot.png", "screen", "SLOOP in fm1-emu", ""]];
+E.forEach((e, i) => { const [im, ik, cr, lg] = IMG[i] || []; Object.assign(e, { im, ik, cr, lg }); });
 // New GitHub repositories mentioning "M-VAVE" (name, description or readme), per day. GitHub search, 16 Oct 2026.
 // June-Sept as monthly totals (spread per day); a few hits are other M-VAVE products.
 const MONTHLY = {"2026-06":11,"2026-07":26,"2026-08":34,"2026-09a":32};
@@ -285,6 +313,8 @@ const day = (s) => Math.round(Date.UTC(+s.slice(0,4), +s.slice(5,7)-1, +s.slice(
 const fmt = (n) => { const d = new Date(n*864e5); return `${String(d.getUTCDate()).padStart(2,"0")} ${MON[d.getUTCMonth()]} ${d.getUTCFullYear()}`; };
 const fmtLong = (s) => { const d = new Date(day(s)*864e5); return d.toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric",timeZone:"UTC"}); };
 E.forEach((e,i) => { e.i = i; e.n = day(e.d); });
+const logoHTML = (e) => !e.lg ? "" : e.lg.startsWith("txt:") ? `<em class="lgt">${e.lg.slice(4)}</em>` : `<img class="lg" src="${e.lg}" alt="" loading="lazy">`;
+const imgHTML = (e, cls = "ci") => !e.im ? "" : `<figure class="${cls} ${e.ik}"><img src="${e.im}" alt="${e.t.replace(/"/g, "")}" loading="lazy" decoding="async"><figcaption>${e.cr}</figcaption></figure>`;
 
 // ------------------------------------------------------------------ list view (always built: also the no-WebGL / reduced-motion view)
 const list = document.getElementById("list");
@@ -294,7 +324,7 @@ const list = document.getElementById("list");
     const m = e.d.slice(0,7);
     if (m !== lastMonth) { html += `<h2>${new Date(day(e.d)*864e5).toLocaleDateString("en-GB",{month:"long",year:"numeric",timeZone:"UTC"})}</h2>`; lastMonth = m;
       if (m === "2026-10") html += chartHTML(); }
-    html += `<article class="it"><time datetime="${e.d}">${fmt(e.n).slice(0,6)}</time><div><div class="k" style="color:${C[e.c].col}">${C[e.c].name}</div><h3>${e.t}</h3><p>${e.x}</p>${e.s.map(([a,h])=>`<a href="${h}">${a}</a>`).join(" · ")}</div></article>`;
+    html += `<article class="it"><time datetime="${e.d}">${fmt(e.n).slice(0,6)}</time><div>${imgHTML(e, "li-img")}<div class="k" style="color:${C[e.c].col}">${logoHTML(e)}${C[e.c].name}</div><h3>${e.t}</h3><p>${e.x}</p>${e.s.map(([a,h])=>`<a href="${h}">${a}</a>`).join(" · ")}</div></article>`;
   }
   list.innerHTML = html;
 }
@@ -491,7 +521,7 @@ async function boot(){
     const sx = (e.i % 2 ? 1 : -1), off = NARROW ? new THREE.Vector3(sx * 0.6, 2.2 + k*1.6, 0) : new THREE.Vector3(sx * (4.2 + (k%2)*1.6), 1.2 + k*1.5, 0);
     const el = document.createElement("div"); el.className = "card " + (e.m ? "major" : "");
     el.style.setProperty("--c", C[e.c].col);
-    el.innerHTML = `<div class="k"><span>${C[e.c].name}</span><span>${fmt(e.n).slice(0,6)}</span></div><h3>${e.t}</h3><p>${e.x.split(". ")[0]}.</p>`;
+    el.innerHTML = `${imgHTML(e)}<div class="k"><span>${logoHTML(e)}${C[e.c].name}</span><span>${fmt(e.n).slice(0,6)}</span></div><h3>${e.t}</h3><p>${e.x.split(". ")[0]}.</p>`;
     el.addEventListener("click", () => openDetail(e.i));
     const o = new CSS2DObject(el); o.position.copy(c).add(off); scene.add(o);
     const lg = new THREE.BufferGeometry().setFromPoints([c, c.clone().add(off.clone().multiplyScalar(.92))]);
@@ -533,7 +563,7 @@ async function boot(){
       const it = document.createElement("div"); it.className = "si" + (e.m ? " maj" : ""); it.tabIndex = 0; it.setAttribute("role","button");
       it.style.setProperty("--c", C[e.c].col);
       it.innerHTML = `<div class="row"><i style="color:${C[e.c].col};background:${C[e.c].col}"></i><time>${fmt(e.n).slice(0,6)}</time><b>${e.t}</b></div>
-        <div class="more">${e.x}<br>${e.s.map(([t,h]) => `<a href="${h}" target="_blank" rel="noopener">${t} ↗</a>`).join("")}</div>`;
+        <div class="more">${imgHTML(e, "si-img")}${e.x}<br>${e.s.map(([t,h]) => `<a href="${h}" target="_blank" rel="noopener">${t} ↗</a>`).join("")}</div>`;
       it.addEventListener("click", (ev) => { if (ev.target.closest("a")) return; openDetail(e.i); });
       it.addEventListener("keydown", (ev) => { if (ev.key === "Enter") openDetail(e.i); });
       sitems.appendChild(it); items.push(it);
@@ -603,7 +633,8 @@ async function boot(){
   addEventListener("keydown", () => { gestured = true; }, { capture: true });
   pill.onclick = () => { gestured = true; pill.classList.add("gone"); Sound.setOn(true); sndLabel(); if (!auto) setAuto(true); else Sound.start(); };
   sndBtn.addEventListener("click", () => { pill.classList.add("gone"); if (auto && Sound.on) Sound.start(); });
-  if (!isEmbed()) { setAuto(true); setTimeout(startGone, 3800); }
+  const NOAUTO = new URLSearchParams(location.search).has("noauto");   // (for linking to a still view, and for tests)
+  if (!isEmbed()) { if (!NOAUTO) setAuto(true); setTimeout(startGone, NOAUTO ? 0 : 3800); }
   let fullFromEmbed = false;
   async function enterFull(){
     const el = document.documentElement; let ok = false;
