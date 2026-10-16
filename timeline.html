@@ -106,6 +106,36 @@ body{min-height:100vh}
   #sidebtn{display:inline-block}
   #track{right:218px}
 }
+/* embed (a live preview on another page), the start screen, the loop fade */
+#embedui{display:none;position:fixed;inset:0;z-index:20;cursor:pointer;background:linear-gradient(180deg,rgba(5,6,11,0) 50%,rgba(5,6,11,.8))}
+body.embed #embedui{display:block}
+#embedui .eb{position:absolute;left:18px;bottom:16px;right:310px}
+#embedui .t{font:700 clamp(18px,3vw,26px) "Space Grotesk";letter-spacing:-.02em}
+#embedui .s{color:var(--dim);font-size:13px;margin-top:2px}
+#embedui .pill{position:absolute;right:16px;bottom:16px;font:600 12px "JetBrains Mono",monospace;letter-spacing:.06em;padding:10px 14px;border-radius:999px;
+  background:rgba(255,79,163,.18);border:1px solid rgba(255,79,163,.65);color:#fff;animation:pulse 2.4s ease-in-out infinite;white-space:nowrap}
+@keyframes pulse{50%{box-shadow:0 0 0 7px rgba(255,79,163,.12)}}
+body.embed #brand,body.embed #legend,body.embed #bar,body.embed #side,body.embed #hint,body.embed #scroller,body.embed #start{display:none}
+body.embed #clock{top:12px;right:14px} body.embed #clock .era{display:none} body.embed #clock .d{font-size:22px}
+@media (max-width:520px){ #embedui .eb{right:16px;bottom:58px} #embedui .s{display:none} }
+#start{position:fixed;inset:0;z-index:15;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at center,rgba(5,6,11,.25),rgba(5,6,11,.88));transition:opacity .7s}
+#start.gone{opacity:0;pointer-events:none}
+body.starting #labels,body.starting #hint{opacity:0}
+#labels{transition:opacity .6s}
+body.listmode #start{display:none}
+#start .box{max-width:560px;text-align:center;padding:24px}
+#start .k{font:600 11px "JetBrains Mono",monospace;letter-spacing:.16em;color:var(--mv)}
+#start h2{font-size:clamp(36px,7vw,72px);margin:8px 0 10px;letter-spacing:-.035em;line-height:1}
+#start p{color:#c5cbe6;line-height:1.5;margin:0 auto 22px;max-width:460px}
+#start .b{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+#playsnd{font:700 16px "Space Grotesk";padding:14px 24px;border-radius:999px;border:0;cursor:pointer;color:#08090f;
+  background:linear-gradient(90deg,var(--mv),var(--cf));box-shadow:0 10px 40px rgba(255,79,163,.35)}
+#playsnd span{font-weight:500;opacity:.75}
+#explore{font:600 14px "Space Grotesk";padding:13px 20px;border-radius:999px;cursor:pointer;background:transparent;color:var(--ink);border:1px solid var(--line)}
+#start small{display:block;margin-top:16px;color:var(--dim)}
+#fade{position:fixed;inset:0;z-index:12;background:#05060b;opacity:0;pointer-events:none;transition:opacity .7s}
+#snd.off{opacity:.5}
 /* intro + hint */
 #hint{left:50%;bottom:76px;transform:translateX(-50%);font:500 12px "JetBrains Mono",monospace;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;transition:opacity .6s}
 #hint b{color:var(--ink)}
@@ -163,11 +193,18 @@ body.listmode #swap{display:block}
 </div>
 <div id="clock" class="hud"><div class="d" id="date">JUN 2026</div><div class="era" id="era">the hardware</div></div>
 <div id="hint" class="hud">scroll · <b>→</b> next event · <b>space</b> autoplay</div>
+<div id="embedui" role="button" aria-label="Play the timeline full screen"><div class="eb"><div class="t">The FM-1 Story</div><div class="s">An animated 3D timeline: from a pocket synth to the firmware war</div></div><div class="pill">⤢ CLICK · FULL SCREEN WITH SOUND</div></div>
+<div id="start"><div class="box"><div class="k">3D TIMELINE · 38 EVENTS · JUN–OCT 2026</div><h2>The FM-1 Story</h2>
+<p>How a $90 pocket FM synth became 30+ instruments in under three weeks. Sit back and fly through it, with an FM soundtrack made live in your browser, or explore it yourself.</p>
+<div class="b"><button id="playsnd">▶ Play the story <span>· with sound</span></button><button id="explore">Explore on my own</button></div>
+<small>Scroll, drag or press ← → at any time to take over. Space plays and pauses.</small></div></div>
+<div id="fade"></div>
 <div id="legend" class="hud" role="group" aria-label="Filter by kind"></div>
 <div id="bar" class="hud">
   <div id="track"><div id="fill"></div></div>
   <div id="ctrls">
     <button id="auto" title="Play the story (Space)">▶ AUTO</button>
+    <button id="snd" title="Sound on/off (M)">♪ ON</button>
     <button id="prev" title="Previous event (←)">←</button>
     <button id="next" title="Next event (→)">→</button>
     <button id="sidebtn" title="Show the events">EVENTS</button>
@@ -269,7 +306,70 @@ document.getElementById("to3d").onclick = () => { setList(false); if (!started) 
 let started = false;
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const gl = (() => { try { const c = document.createElement("canvas"); return !!(c.getContext("webgl2") || c.getContext("webgl")); } catch { return false; } })();
-if (!gl || reduce) setList(true); else boot();
+const EMBED = new URLSearchParams(location.search).has("embed");
+document.body.classList.toggle("embed", EMBED);
+if (EMBED && (!gl || reduce)) {          // a still picture and a link instead of the animation
+  document.body.innerHTML = `<a href="timeline.html" target="_top" style="position:fixed;inset:0;display:block;background:#05060b url(assets/timeline-poster.jpg) center/cover;color:#fff;text-decoration:none">
+    <span style="position:absolute;left:18px;bottom:16px;font:700 22px 'Space Grotesk',sans-serif">The FM-1 Story →</span></a>`;
+} else if (!gl || reduce) setList(true); else boot();
+
+// ------------------------------------------------------------------ sound: an FM drone and FM bells, made live with Web Audio
+const Sound = (() => {
+  let ac = null, master, dry, rev, drone = [], active = false;
+  let on = (() => { try { return localStorage.getItem("fm1tl.snd") !== "0"; } catch { return true; } })();
+  function init(){
+    if (ac) return;
+    ac = new (window.AudioContext || window.webkitAudioContext)();
+    master = ac.createGain(); master.gain.value = 0;
+    const comp = ac.createDynamicsCompressor(); comp.threshold.value = -18; comp.ratio.value = 3;
+    master.connect(comp); comp.connect(ac.destination);
+    dry = ac.createGain(); dry.gain.value = .8; dry.connect(master);
+    rev = ac.createConvolver();                                  // a generated 3.4 s hall
+    const len = Math.floor(ac.sampleRate * 3.4), ir = ac.createBuffer(2, len, ac.sampleRate);
+    for (let ch = 0; ch < 2; ch++) { const d = ir.getChannelData(ch); for (let i = 0; i < len; i++) d[i] = (Math.random()*2 - 1) * Math.pow(1 - i/len, 2.8); }
+    rev.buffer = ir; const rg = ac.createGain(); rg.gain.value = .5; rev.connect(rg); rg.connect(master);
+    // three 2-operator FM voices: carrier + modulator at 2:1, the index and the filter follow the story's heat
+    drone = [55, 82.41, 110].map((f, k) => {
+      const car = ac.createOscillator(), mod = ac.createOscillator(), mg = ac.createGain(), vg = ac.createGain(), lp = ac.createBiquadFilter();
+      car.frequency.value = f; mod.frequency.value = f * 2; mg.gain.value = f * .4; mod.connect(mg); mg.connect(car.frequency);
+      vg.gain.value = .04; lp.type = "lowpass"; lp.frequency.value = 500; lp.Q.value = .7;
+      car.connect(vg); vg.connect(lp);
+      const pan = ac.createStereoPanner ? ac.createStereoPanner() : null;
+      if (pan) { pan.pan.value = [-.55, 0, .55][k]; lp.connect(pan); pan.connect(dry); pan.connect(rev); } else { lp.connect(dry); lp.connect(rev); }
+      const lfo = ac.createOscillator(), lg = ac.createGain(); lfo.frequency.value = .07 + k*.03; lg.gain.value = .7; lfo.connect(lg); lg.connect(car.detune);
+      car.start(); mod.start(); lfo.start();
+      return { car, mod, mg, vg, lp, f };
+    });
+  }
+  const level = () => (on && active ? .8 : 0);
+  function start(){ init(); ac.resume(); active = true; master.gain.setTargetAtTime(level(), ac.currentTime, .8); }
+  function stop(){ active = false; if (ac) master.gain.setTargetAtTime(0, ac.currentTime, .5); }
+  function setOn(v){ on = v; try { localStorage.setItem("fm1tl.snd", v ? "1" : "0"); } catch {} if (ac) master.gain.setTargetAtTime(level(), ac.currentTime, .3); }
+  function heat(h, root){                                          // h 0..1: how hot the scene is at this date
+    if (!ac || !active) return; const t = ac.currentTime;
+    for (const v of drone) {
+      v.car.frequency.setTargetAtTime(v.f * root, t, 2); v.mod.frequency.setTargetAtTime(v.f * root * 2, t, 2);
+      v.mg.gain.setTargetAtTime(v.f * root * (.35 + h * 3.4), t, 1.2);
+      v.lp.frequency.setTargetAtTime(380 + h * 2800, t, 1.2); v.vg.gain.setTargetAtTime(.035 + h * .03, t, 1.2);
+    }
+  }
+  function ping(note, major, panv){                                // a DX-style FM bell; the big moments get an electric piano and a low octave
+    if (!ac || !active || !on) return; const t = ac.currentTime + .02, f = 440 * Math.pow(2, (note - 69) / 12), dur = major ? 4 : 1.8;
+    const car = ac.createOscillator(), mod = ac.createOscillator(), mg = ac.createGain(), vg = ac.createGain();
+    car.frequency.value = f; mod.frequency.value = f * (major ? 1 : 3.5);
+    mg.gain.setValueAtTime(f * (major ? 2.4 : 5), t); mg.gain.exponentialRampToValueAtTime(f * .03, t + (major ? 2.6 : .8));
+    mod.connect(mg); mg.connect(car.frequency);
+    vg.gain.setValueAtTime(.0001, t); vg.gain.exponentialRampToValueAtTime(major ? .3 : .17, t + .008); vg.gain.exponentialRampToValueAtTime(.0001, t + dur);
+    car.connect(vg); let out = vg;
+    if (ac.createStereoPanner) { const pn = ac.createStereoPanner(); pn.pan.value = panv; vg.connect(pn); out = pn; }
+    out.connect(dry); out.connect(rev);
+    car.start(t); mod.start(t); car.stop(t + dur + .1); mod.stop(t + dur + .1);
+    if (major) { const o = ac.createOscillator(), g = ac.createGain(); o.frequency.value = f / 2;
+      g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.22, t + .02); g.gain.exponentialRampToValueAtTime(.0001, t + 3.6);
+      o.connect(g); g.connect(dry); g.connect(rev); o.start(t); o.stop(t + 3.7); }
+  }
+  return { start, stop, setOn, heat, ping, get on(){ return on; }, get active(){ return active; } };
+})();
 
 // ------------------------------------------------------------------ the 3D timeline
 async function boot(){
@@ -308,7 +408,7 @@ async function boot(){
   const NARROW = innerWidth < 640;
   const canvas = document.getElementById("scene");
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setPixelRatio(Math.min(devicePixelRatio, EMBED ? 1.25 : 2));
   renderer.setSize(innerWidth, innerHeight);
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x05060b);
@@ -413,7 +513,8 @@ async function boot(){
   const scrollMax = () => document.documentElement.scrollHeight - innerHeight;
   let camZ = zStart, target = zStart;
   const zFromScroll = () => zStart + (scrollY / Math.max(1, scrollMax())) * (zEnd - zStart);
-  addEventListener("scroll", () => { target = zFromScroll(); document.getElementById("hint").style.opacity = scrollY > 40 ? 0 : 1; }, { passive: true });
+  const isEmbed = () => document.body.classList.contains("embed");
+  addEventListener("scroll", () => { if (auto || isEmbed()) return; target = zFromScroll(); document.getElementById("hint").style.opacity = scrollY > 40 ? 0 : 1; }, { passive: true });
   const goZ = (zz) => scrollTo({ top: (zz - zStart) / (zEnd - zStart) * scrollMax(), behavior: "smooth" });
   const nearest = (dir) => { const cur = target + 9; const vis = E.filter(e => !off.has(e.c));
     const n = dir > 0 ? vis.find(e => e.z > cur + .5) : [...vis].reverse().find(e => e.z < cur - .5); return n; };
@@ -454,40 +555,66 @@ async function boot(){
   document.getElementById("sidebtn").onclick = () => sideEl.classList.toggle("open");
   document.getElementById("sclose").onclick = () => sideEl.classList.remove("open");
 
-  // ---- autoplay: fly from event to event, longer on the big ones; any manual move pauses it
-  let auto = false, timer = 0; const autoBtn = document.getElementById("auto");
+  // ---- autoplay: one continuous glide that slows down near each event (most near the big ones), never stops
+  let auto = false; const autoBtn = document.getElementById("auto"), sndBtn = document.getElementById("snd"), fadeEl = document.getElementById("fade");
+  const bumps = E.map(e => [e.z, e.m ? .8 : .52]);
+  const slow = (zz) => { let s = 0; for (const [ez, w] of bumps) { const d = (zz + 9 - ez) / 5.5; if (d > -4 && d < 4) s = Math.max(s, w * Math.exp(-d*d)); } return 1 - s; };
+  let BASE = 1; { let T = 0; for (let zz = zStart; zz < zEnd; zz += .5) T += .5 / slow(zz); BASE = T / 165; }   // the whole story in ~2 min 45 s
+  const syncScroll = () => { if (!isEmbed()) scrollTo(0, (target - zStart) / (zEnd - zStart) * scrollMax()); };
+  let wrapping = false;
+  function wrapToStart(){ if (wrapping) return; wrapping = true; fadeEl.style.opacity = 1;
+    setTimeout(() => { target = camZ = zStart; lastPing = -1; syncScroll(); fadeEl.style.opacity = 0; wrapping = false; }, 750); }
   function setAuto(on){
-    auto = on; clearTimeout(timer);
+    auto = on;
     autoBtn.classList.toggle("on", on); autoBtn.textContent = on ? "❚❚ PAUSE" : "▶ AUTO";
-    if (on) stepAuto(true);
-  }
-  function stepAuto(first){
-    if (!auto) return;
-    const vis = E.filter(e => !off.has(e.c)), cur = target + 9;
-    let n = first ? vis.find(e => e.z > cur - 1) : nearest(1);
-    if (first && (!n || n === vis[vis.length-1])) n = vis[0];        // at the end: start again from the beginning
-    if (!n) { setAuto(false); return; }
-    setActive(n.i); goZ(n.z - 9);
-    timer = setTimeout(() => stepAuto(false), n.m ? 6500 : 4200);
+    if (on) { if (target >= zEnd - 2) wrapToStart(); if (!isEmbed()) Sound.start(); }
+    else Sound.stop();
   }
   autoBtn.onclick = () => setAuto(!auto);
-  const pause = () => { if (auto) setAuto(false); };
-  addEventListener("wheel", (ev) => { if (!ev.target.closest || !ev.target.closest("#side")) pause(); }, { passive: true });
+  const sndLabel = () => { sndBtn.textContent = Sound.on ? "♪ ON" : "♪ OFF"; sndBtn.classList.toggle("off", !Sound.on); };
+  sndBtn.onclick = () => { Sound.setOn(!Sound.on); sndLabel(); }; sndLabel();
+  const pause = () => { if (auto && !isEmbed()) setAuto(false); };
+  addEventListener("wheel", (ev) => { if (!ev.target.closest || !ev.target.closest("#side")) { pause(); startGone(); } }, { passive: true });
   addEventListener("touchmove", (ev) => { if (!ev.target.closest("#side")) pause(); }, { passive: true });
   canvas.addEventListener("pointerdown", pause);
   document.getElementById("next").addEventListener("click", pause, true);
   document.getElementById("prev").addEventListener("click", pause, true);
   addEventListener("keydown", (ev) => {
+    if (isEmbed()) return;
     if (ev.target.closest && ev.target.closest(".si") && ev.key === "Enter") return;
-    if (ev.key === "ArrowRight" || ev.key === "j") { ev.preventDefault(); pause(); document.getElementById("next").click(); }
-    if (ev.key === "ArrowLeft" || ev.key === "k") { ev.preventDefault(); pause(); document.getElementById("prev").click(); }
-    if (ev.key === " " && !(ev.target.closest && ev.target.closest("button"))) { ev.preventDefault(); setAuto(!auto); }
+    if (ev.key === "ArrowRight" || ev.key === "j") { ev.preventDefault(); pause(); startGone(); document.getElementById("next").click(); }
+    if (ev.key === "ArrowLeft" || ev.key === "k") { ev.preventDefault(); pause(); startGone(); document.getElementById("prev").click(); }
+    if (ev.key === " " && !(ev.target.closest && ev.target.closest("button"))) { ev.preventDefault(); startGone(); setAuto(!auto); }
+    if (ev.key === "m") sndBtn.click();
     if (ev.key === "Escape") { pause(); sideEl.classList.remove("open"); }
   });
 
+  // ---- the start screen (full page) and the embed (a silent looping preview; a click goes full screen with sound)
+  const startEl = document.getElementById("start");
+  function startGone(){ startEl.classList.add("gone"); document.body.classList.remove("starting"); document.getElementById("hint").style.display = "none"; }
+  if (!isEmbed()) document.body.classList.add("starting");
+  document.getElementById("playsnd").onclick = () => { startGone(); Sound.setOn(true); sndLabel(); setAuto(true); };
+  document.getElementById("explore").onclick = () => startGone();
+  let fullFromEmbed = false;
+  async function enterFull(){
+    const el = document.documentElement; let ok = false;
+    try { if (el.requestFullscreen) { await el.requestFullscreen(); ok = true; } else if (el.webkitRequestFullscreen) { el.webkitRequestFullscreen(); ok = true; } } catch { ok = false; }
+    if (!ok) { (window.top || window).location.href = "timeline.html?play=1"; return; }   // no element full screen (iPhone): the page itself
+    fullFromEmbed = true; document.body.classList.remove("embed"); startGone();
+    applyView(); syncScroll(); Sound.setOn(true); sndLabel(); Sound.start(); if (!auto) setAuto(true);
+  }
+  document.getElementById("embedui").addEventListener("click", enterFull);
+  const fsChange = () => { if (!(document.fullscreenElement || document.webkitFullscreenElement) && fullFromEmbed) {
+      fullFromEmbed = false; document.body.classList.add("embed"); Sound.stop(); sideEl.classList.remove("open"); applyView(); if (!auto) setAuto(true); } };
+  document.addEventListener("fullscreenchange", fsChange); document.addEventListener("webkitfullscreenchange", fsChange);
+  if (isEmbed()) { startGone(); setAuto(true); }
+  // the page around the embed says when it is out of view: no rendering then
+  let hiddenByHost = false;
+  addEventListener("message", (ev) => { if (ev.data && ev.data.fm1tl === "vis") hiddenByHost = !ev.data.v; });
+
   // the 3D view is centred in the space left of the list
   const SIDE = 330 + 36;
-  const applyView = () => { if (WIDE()) camera.setViewOffset(innerWidth, innerHeight, SIDE/2, 0, innerWidth, innerHeight); else camera.clearViewOffset(); };
+  const applyView = () => { if (WIDE() && !isEmbed()) camera.setViewOffset(innerWidth, innerHeight, SIDE/2, 0, innerWidth, innerHeight); else camera.clearViewOffset(); };
   applyView();
 
   // mouse parallax
@@ -497,9 +624,15 @@ async function boot(){
 
   const dateEl = document.getElementById("date"), eraEl = document.getElementById("era");
   const clock = new THREE.Clock(); const look = new THREE.Vector3(); const cp = new THREE.Vector3();
-  target = zFromScroll(); camZ = target;
+  target = isEmbed() ? zStart : zFromScroll(); camZ = target; let lastPing = -1, lastHeat = 0;
   (function frame(){
     const dt = Math.min(.25, clock.getDelta()), t = clock.elapsedTime;
+    if (hiddenByHost || document.hidden) { requestAnimationFrame(frame); return; }
+    if (auto && !wrapping) {
+      target += BASE * slow(target) * dt;
+      if (target >= zEnd) { target = zEnd; if (isEmbed() || fullFromEmbed) wrapToStart(); else setAuto(false); }
+      syncScroll();
+    }
     const ease = 1 - Math.exp(-dt * 4.5);           // frame-rate independent: the same glide at 20 or 120 fps
     camZ += (target - camZ) * ease;
     const c = P(camZ), ahead = P(camZ + 14);
@@ -519,7 +652,15 @@ async function boot(){
         n.ring.scale.setScalar(1 + .12*Math.sin(t*2 + n.e.i)); }
       n.s.scale.setScalar(1 + .15*Math.sin(t*3 + n.e.i*1.7));
     }
-    if (focus && !auto) setActive(focus.e.i);
+    if (focus) setActive(focus.e.i);
+    if (auto && focus && focus.e.i !== lastPing && Math.abs(focus.e.z - camZ - 9) < 2.5) {   // an event reaches the focus: its note
+      lastPing = focus.e.i; const base = { hw: 57, mv: 64, cf: 69, tool: 72, smk: 74, press: 76 }[focus.e.c];
+      Sound.ping(focus.e.m ? base - 12 : base, !!focus.e.m, focus.e.i % 2 ? .4 : -.4);
+    }
+    if (Sound.active && t - lastHeat > .5) { lastHeat = t; const dnow = dayOfZ(camZ + 9);
+      const cnt = DAILY[new Date(dnow*864e5).toISOString().slice(0,10)] ?? (dnow > day("2026-10-15") ? 20 : 1);
+      const root = dnow < day("2026-08-01") ? 1 : dnow < day("2026-09-28") ? .8909 : dnow < day("2026-10-04") ? 1.1892 : 1.3348;
+      Sound.heat(Math.min(1, cnt / 28), root); }
     for (const m of monthLabels) { const d = m.z - camZ; m.el.style.opacity = d > -4 && d < 70 ? 1 : 0; }
     burst.rotation.z = Math.sin(t*.05)*.02;
     const dn = dayOfZ(camZ + 9); dateEl.textContent = fmt(dn);

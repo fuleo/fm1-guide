@@ -12,12 +12,23 @@ title: Home
 .card img{width:100%;height:auto;border-radius:8px;image-rendering:pixelated;display:block;margin-bottom:8px}
 .card h3{margin:0 0 6px;font-size:1.1em}
 .card p{margin:0;font-size:.92em;line-height:1.4}
+.tl-embed{position:relative;aspect-ratio:16/9;margin:6px 0 8px;border-radius:14px;overflow:hidden;border:1px solid #2a2f55;
+  background:#05060b url(assets/timeline-poster.jpg) center/cover;box-shadow:0 14px 40px rgba(10,12,40,.25)}
+.tl-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.tl-cap{font-size:.9em;color:#555;margin:0 0 24px}
+@media (max-width:600px){ .tl-embed{aspect-ratio:4/5} }
 .post-content table, .page-content table{display:block;overflow-x:auto;max-width:100%}
 </style>
 
 Practical, tested guides for the **M-VAVE FM-1** pocket synth. They cover the free **Felucca** firmware, the stock firmware, and updating it all from **Linux**. Every step was tried on a real FM-1 or in an emulator running the real firmware, and the screenshots are real screens.
 
-<div class="tlcard" markdown="0"><a href="timeline.html" style="display:block;text-decoration:none;color:inherit;margin:4px 0 22px;border-radius:14px;overflow:hidden;background:linear-gradient(110deg,#05060b 0%,#0b1630 45%,#2a0a22 100%);border:1px solid #2a2f55"><div style="padding:18px 20px"><div style="font:600 11px monospace;letter-spacing:.14em;color:#38d6ff">NEW · 3D TIMELINE</div><div style="font-size:1.45em;font-weight:700;color:#eef1ff;margin:4px 0 4px">The FM-1 Story →</div><div style="color:#b8bfe0;font-size:.95em;line-height:1.4">From the hardware's unveiling in June 2026, through M-VAVE's V09–V15 updates, to the first custom firmware and the October "firmware war": 38 milestones, with sources, flown through in 3D.</div></div></a></div>
+<div class="tl-embed" markdown="0"><iframe id="tlframe" src="timeline.html?embed=1" title="The FM-1 Story: an animated 3D timeline. Click to play it full screen with sound." loading="lazy" allow="fullscreen; autoplay" allowfullscreen></iframe></div>
+<p class="tl-cap"><b>The FM-1 Story</b>, a 3D timeline: 38 milestones from June to October 2026, with an FM soundtrack made live in your browser. <b>Click it</b> to play it full screen, or <a href="timeline.html">open it on its own page →</a></p>
+<script>
+(function(){ var f = document.getElementById("tlframe"); if (!f || !("IntersectionObserver" in window)) return;
+  new IntersectionObserver(function(es){ es.forEach(function(e){ try { f.contentWindow.postMessage({ fm1tl: "vis", v: e.isIntersecting }, "*"); } catch (x) {} }); }, { threshold: 0.05 }).observe(f);
+})();
+</script>
 
 <figure class="hero"><img src="assets/felucca/panel.png" alt="The FM-1 panel running Felucca, drawn by Felucca's browser version"><figcaption>The FM-1 running Felucca 1.6.1: four knobs on the left, KNOB 1–4 on the right, 12 buttons and 27 keys.</figcaption></figure>
 
