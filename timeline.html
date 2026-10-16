@@ -69,25 +69,50 @@ body{min-height:100vh}
 .daylabel{font:600 11px "JetBrains Mono",monospace;color:var(--dim);letter-spacing:.1em;white-space:nowrap;transition:opacity .3s}
 .monthlabel{font:700 clamp(28px,5vw,64px) "Space Grotesk";color:rgba(200,210,255,.08);letter-spacing:-.03em;white-space:nowrap;transition:opacity .3s}
 /* detail panel */
-#detail{position:fixed;z-index:9;right:0;top:0;bottom:0;width:min(420px,100vw);background:rgba(8,9,18,.94);border-left:1px solid var(--line);
-  transform:translateX(105%);transition:transform .35s cubic-bezier(.2,.8,.2,1);padding:26px 24px;overflow:auto;backdrop-filter:blur(10px)}
-#detail.open{transform:none}
-#detail .k{font:600 12px "JetBrains Mono",monospace;letter-spacing:.1em;text-transform:uppercase}
-#detail h2{margin:8px 0 10px;font-size:26px;line-height:1.1}
-#detail p{color:#cdd2ee;line-height:1.5;font-size:15px}
-#detail a{color:var(--mv)}
-#detail .src{margin-top:16px;font-size:13px;color:var(--dim)}
-#detail .src a{display:block;margin-top:6px;word-break:break-word}
-#detail .x{position:absolute;right:14px;top:14px;background:none;border:1px solid var(--line);color:var(--ink);border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:16px}
-#detail .nav{display:flex;gap:8px;margin-top:22px}
-#detail .nav button{flex:1;font:600 12px "JetBrains Mono",monospace;background:rgba(255,255,255,.04);color:var(--ink);border:1px solid var(--line);border-radius:8px;height:34px;cursor:pointer}
+/* the event list: always on the right (desktop), a pull-up sheet (phone) */
+:root{--side:330px}
+#side{position:fixed;z-index:7;right:18px;top:96px;bottom:72px;width:var(--side);background:rgba(9,10,20,.78);border:1px solid var(--line);
+  border-radius:14px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;flex-direction:column;overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.45)}
+#side .sh{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line);font:600 11px "JetBrains Mono",monospace;letter-spacing:.12em;color:var(--dim)}
+#side .sh #scount{margin-left:auto;letter-spacing:.04em}
+#sclose{display:none;background:none;border:1px solid var(--line);color:var(--ink);border-radius:8px;width:28px;height:28px;cursor:pointer}
+#sitems{position:relative;overflow:auto;padding:0 6px 10px;overscroll-behavior:contain}
+.sm{position:sticky;top:0;z-index:1;background:rgba(9,10,20,.96);font:600 10.5px "JetBrains Mono",monospace;letter-spacing:.14em;color:var(--dim);padding:10px 8px 6px}
+.si{display:block;padding:7px 8px;border-radius:9px;cursor:pointer;outline:none}
+.si:hover,.si:focus-visible{background:rgba(255,255,255,.05)}
+.si .row{display:flex;gap:8px;align-items:baseline}
+.si i{width:8px;height:8px;border-radius:50%;flex:0 0 8px;transform:translateY(-1px);box-shadow:0 0 8px currentColor}
+.si time{font:500 10.5px "JetBrains Mono",monospace;color:var(--dim);flex:0 0 46px}
+.si b{font-weight:500;font-size:13px;line-height:1.3}
+.si.maj b{font-weight:700}
+.si .more{display:none;margin:6px 0 2px 62px;font-size:12.5px;line-height:1.45;color:#c5cbe6}
+.si .more a{color:var(--mv);display:inline-block;margin:5px 10px 0 0;font-size:12px}
+.si.on{background:color-mix(in srgb,var(--c) 15%,transparent);box-shadow:inset 3px 0 0 var(--c)}
+.si.on .more{display:block}
+.si.past{opacity:.6}
+.si.hid{display:none}
+#bar{right:calc(var(--side) + 40px)}
+#legend{max-width:calc(100vw - var(--side) - 90px)}
+#auto{min-width:86px}
+#auto.on{border-color:var(--cf);color:var(--cf);box-shadow:0 0 18px rgba(255,79,163,.35)}
+#sidebtn{display:none}
+@media (max-width:760px){
+  #side{left:10px;right:10px;width:auto;top:auto;bottom:66px;height:48vh;transform:translateY(calc(100% + 80px));transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+  #side.open{transform:none}
+  #sclose{display:block}
+  #bar{right:22px}
+  #legend{max-width:92vw}
+  #sidebtn{display:inline-block}
+  #track{right:218px}
+}
 /* intro + hint */
 #hint{left:50%;bottom:76px;transform:translateX(-50%);font:500 12px "JetBrains Mono",monospace;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;transition:opacity .6s}
 #hint b{color:var(--ink)}
 /* list view */
 #list{display:none;position:relative;z-index:6;max-width:820px;margin:0 auto;padding:110px 18px 80px}
 body.listmode #list{display:block}
-body.listmode #scene,body.listmode #labels,body.listmode #scroller,body.listmode #legend,body.listmode #bar,body.listmode #hint,body.listmode #clock{display:none}
+body.listmode #side,body.listmode #scene,body.listmode #labels,body.listmode #scroller,body.listmode #legend,body.listmode #bar,body.listmode #hint,body.listmode #clock{display:none}
 body.listmode #brand{position:absolute}
 #list h2{font-size:20px;margin:34px 0 8px;color:var(--dim);font-weight:500;letter-spacing:.04em}
 #list .it{display:grid;grid-template-columns:92px 1fr;gap:14px;padding:12px 0;border-top:1px solid var(--line)}
@@ -137,25 +162,20 @@ body.listmode #swap{display:block}
   <p>A $90 pocket FM synth, M-VAVE's firmware updates, and how the community turned it into 30+ instruments in under three weeks. Scroll to travel through time.</p>
 </div>
 <div id="clock" class="hud"><div class="d" id="date">JUN 2026</div><div class="era" id="era">the hardware</div></div>
-<div id="hint" class="hud">scroll · or press <b>→</b> for the next event</div>
+<div id="hint" class="hud">scroll · <b>→</b> next event · <b>space</b> autoplay</div>
 <div id="legend" class="hud" role="group" aria-label="Filter by kind"></div>
 <div id="bar" class="hud">
   <div id="track"><div id="fill"></div></div>
   <div id="ctrls">
+    <button id="auto" title="Play the story (Space)">▶ AUTO</button>
     <button id="prev" title="Previous event (←)">←</button>
     <button id="next" title="Next event (→)">→</button>
-    <button id="tolist" class="wide" title="Read it as a list">LIST</button>
+    <button id="sidebtn" title="Show the events">EVENTS</button>
+    <button id="tolist" class="wide" title="Read it as a page">READ</button>
   </div>
 </div>
 
-<aside id="detail" aria-live="polite">
-  <button class="x" id="close" aria-label="Close">✕</button>
-  <div class="k" id="dk"></div>
-  <h2 id="dt"></h2>
-  <p id="dx"></p>
-  <div class="src" id="ds"></div>
-  <div class="nav"><button id="dprev">← earlier</button><button id="dnext">later →</button></div>
-</aside>
+<aside id="side" aria-label="All events"><div class="sh"><span>EVENTS</span><span id="scount"></span><button id="sclose" aria-label="Hide the list">✕</button></div><div id="sitems"></div></aside>
 
 <div id="swap"><button id="to3d">3D VIEW</button></div>
 <main id="list" aria-label="Timeline as a list"></main>
@@ -399,31 +419,80 @@ async function boot(){
     const n = dir > 0 ? vis.find(e => e.z > cur + .5) : [...vis].reverse().find(e => e.z < cur - .5); return n; };
   document.getElementById("next").onclick = () => { const n = nearest(1); if (n) goZ(n.z - 9); };
   document.getElementById("prev").onclick = () => { const n = nearest(-1); if (n) goZ(n.z - 9); };
+  // ---- the event list (right) : the active event expands in place
+  const sideEl = document.getElementById("side"), sitems = document.getElementById("sitems"), items = [];
+  { let lastM = "";
+    for (const e of E) {
+      const m = e.d.slice(0,7);
+      if (m !== lastM) { const h = document.createElement("div"); h.className = "sm"; h.textContent = new Date(day(e.d)*864e5).toLocaleDateString("en-GB",{month:"long",year:"numeric",timeZone:"UTC"}).toUpperCase(); sitems.appendChild(h); lastM = m; }
+      const it = document.createElement("div"); it.className = "si" + (e.m ? " maj" : ""); it.tabIndex = 0; it.setAttribute("role","button");
+      it.style.setProperty("--c", C[e.c].col);
+      it.innerHTML = `<div class="row"><i style="color:${C[e.c].col};background:${C[e.c].col}"></i><time>${fmt(e.n).slice(0,6)}</time><b>${e.t}</b></div>
+        <div class="more">${e.x}<br>${e.s.map(([t,h]) => `<a href="${h}" target="_blank" rel="noopener">${t} ↗</a>`).join("")}</div>`;
+      it.addEventListener("click", (ev) => { if (ev.target.closest("a")) return; openDetail(e.i); });
+      it.addEventListener("keydown", (ev) => { if (ev.key === "Enter") openDetail(e.i); });
+      sitems.appendChild(it); items.push(it);
+    }
+  }
+  const refreshFilter = () => { let n = 0; E.forEach((e,i) => { const h = off.has(e.c); items[i].classList.toggle("hid", h); if (!h) n++; });
+    document.getElementById("scount").textContent = n + " / " + E.length; };
+  refreshFilter();
+  legend.addEventListener("click", () => setTimeout(refreshFilter));
+  let active = -1;
+  function setActive(i){
+    if (i === active) return; active = i;
+    items.forEach((it, k) => { it.classList.toggle("on", k === i); it.classList.toggle("past", k < i); });
+    const it = items[i]; if (it) sitems.scrollTo({ top: Math.max(0, it.offsetTop - sitems.clientHeight * .3), behavior: "smooth" });
+  }
+  const WIDE = () => innerWidth > 760;
+  function openDetail(i, fromAuto){
+    if (!fromAuto) setAuto(false);
+    setActive(i); goZ(E[i].z - 9);
+    if (!WIDE() && !fromAuto) sideEl.classList.add("open");
+  }
+  window.openDetail = openDetail;
+  document.getElementById("sidebtn").onclick = () => sideEl.classList.toggle("open");
+  document.getElementById("sclose").onclick = () => sideEl.classList.remove("open");
+
+  // ---- autoplay: fly from event to event, longer on the big ones; any manual move pauses it
+  let auto = false, timer = 0; const autoBtn = document.getElementById("auto");
+  function setAuto(on){
+    auto = on; clearTimeout(timer);
+    autoBtn.classList.toggle("on", on); autoBtn.textContent = on ? "❚❚ PAUSE" : "▶ AUTO";
+    if (on) stepAuto(true);
+  }
+  function stepAuto(first){
+    if (!auto) return;
+    const vis = E.filter(e => !off.has(e.c)), cur = target + 9;
+    let n = first ? vis.find(e => e.z > cur - 1) : nearest(1);
+    if (first && (!n || n === vis[vis.length-1])) n = vis[0];        // at the end: start again from the beginning
+    if (!n) { setAuto(false); return; }
+    setActive(n.i); goZ(n.z - 9);
+    timer = setTimeout(() => stepAuto(false), n.m ? 6500 : 4200);
+  }
+  autoBtn.onclick = () => setAuto(!auto);
+  const pause = () => { if (auto) setAuto(false); };
+  addEventListener("wheel", (ev) => { if (!ev.target.closest || !ev.target.closest("#side")) pause(); }, { passive: true });
+  addEventListener("touchmove", (ev) => { if (!ev.target.closest("#side")) pause(); }, { passive: true });
+  canvas.addEventListener("pointerdown", pause);
+  document.getElementById("next").addEventListener("click", pause, true);
+  document.getElementById("prev").addEventListener("click", pause, true);
   addEventListener("keydown", (ev) => {
-    if (ev.key === "ArrowRight" || ev.key === "j") { ev.preventDefault(); document.getElementById(det.classList.contains("open") ? "dnext" : "next").click(); }
-    if (ev.key === "ArrowLeft" || ev.key === "k") { ev.preventDefault(); document.getElementById(det.classList.contains("open") ? "dprev" : "prev").click(); }
-    if (ev.key === "Escape") closeDetail();
+    if (ev.target.closest && ev.target.closest(".si") && ev.key === "Enter") return;
+    if (ev.key === "ArrowRight" || ev.key === "j") { ev.preventDefault(); pause(); document.getElementById("next").click(); }
+    if (ev.key === "ArrowLeft" || ev.key === "k") { ev.preventDefault(); pause(); document.getElementById("prev").click(); }
+    if (ev.key === " " && !(ev.target.closest && ev.target.closest("button"))) { ev.preventDefault(); setAuto(!auto); }
+    if (ev.key === "Escape") { pause(); sideEl.classList.remove("open"); }
   });
 
-  // detail panel
-  const det = document.getElementById("detail"); let cur = -1;
-  function openDetail(i){
-    cur = i; const e = E[i];
-    document.getElementById("dk").innerHTML = `<span style="color:${C[e.c].col}">${C[e.c].name}</span> · ${fmtLong(e.d)}`;
-    document.getElementById("dt").textContent = e.t;
-    document.getElementById("dx").textContent = e.x;
-    document.getElementById("ds").innerHTML = "Sources" + e.s.map(([a,h]) => `<a href="${h}" target="_blank" rel="noopener">${a} ↗</a>`).join("");
-    det.classList.add("open"); goZ(e.z - 9);
-  }
-  function closeDetail(){ det.classList.remove("open"); }
-  window.openDetail = openDetail;
-  document.getElementById("close").onclick = closeDetail;
-  document.getElementById("dnext").onclick = () => openDetail(Math.min(E.length-1, cur+1));
-  document.getElementById("dprev").onclick = () => openDetail(Math.max(0, cur-1));
+  // the 3D view is centred in the space left of the list
+  const SIDE = 330 + 36;
+  const applyView = () => { if (WIDE()) camera.setViewOffset(innerWidth, innerHeight, SIDE/2, 0, innerWidth, innerHeight); else camera.clearViewOffset(); };
+  applyView();
 
   // mouse parallax
   let mx = 0, my = 0; addEventListener("pointermove", (ev) => { mx = ev.clientX/innerWidth - .5; my = ev.clientY/innerHeight - .5; });
-  addEventListener("resize", () => { camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
+  addEventListener("resize", () => { camera.aspect = innerWidth/innerHeight; applyView(); camera.updateProjectionMatrix();
     renderer.setSize(innerWidth, innerHeight); labels.setSize(innerWidth, innerHeight); composer.setSize(innerWidth, innerHeight); });
 
   const dateEl = document.getElementById("date"), eraEl = document.getElementById("era");
@@ -450,6 +519,7 @@ async function boot(){
         n.ring.scale.setScalar(1 + .12*Math.sin(t*2 + n.e.i)); }
       n.s.scale.setScalar(1 + .15*Math.sin(t*3 + n.e.i*1.7));
     }
+    if (focus && !auto) setActive(focus.e.i);
     for (const m of monthLabels) { const d = m.z - camZ; m.el.style.opacity = d > -4 && d < 70 ? 1 : 0; }
     burst.rotation.z = Math.sin(t*.05)*.02;
     const dn = dayOfZ(camZ + 9); dateEl.textContent = fmt(dn);
@@ -457,9 +527,10 @@ async function boot(){
     fill.style.width = Math.max(0, Math.min(100, (camZ - zStart)/(zEnd - zStart)*100)) + "%";
     composer.render(); labels.render(scene, camera);
     // a chip on top of the focus card fades away (the renderer orders labels by depth, not by importance)
-    if (focus) { const fr = focus.el.getBoundingClientRect();
-      for (const n of nodes) { if (n === focus || +n.el.style.opacity < .05) continue; const r = n.el.getBoundingClientRect();
-        if (r.left < fr.right + 8 && r.right > fr.left - 8 && r.top < fr.bottom + 8 && r.bottom > fr.top - 8) n.el.style.opacity = ".08"; } }
+    if (focus) { const fr = focus.el.getBoundingClientRect(), sr = WIDE() ? sideEl.getBoundingClientRect() : null;
+      const hit = (r, q) => r.left < q.right + 8 && r.right > q.left - 8 && r.top < q.bottom + 8 && r.bottom > q.top - 8;
+      for (const n of nodes) { if (+n.el.style.opacity < .05) continue; const r = n.el.getBoundingClientRect();
+        if ((n !== focus && hit(r, fr)) || (sr && hit(r, sr))) n.el.style.opacity = n === focus ? ".25" : ".08"; } }
     requestAnimationFrame(frame);
   })();
 }
