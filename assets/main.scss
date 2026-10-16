@@ -6,3 +6,6 @@
 /* wide tables scroll inside themselves on phones instead of widening the page */
 .page-content table { display: block; overflow-x: auto; width: max-content; max-width: 100%; }
 .page-content td code { word-break: break-all; }
+
+/* the menu fits on one line on desktop */
+@media (min-width: 600px) { .site-nav .page-link { margin-left: 14px; font-size: 15px; } .site-nav .page-link:not(:last-child) { margin-right: 0; } }
