@@ -50,6 +50,14 @@ Practical, tested guides for the **M-VAVE FM-1** pocket synth. They cover the fr
 
 **Install:** use the [web installer](https://hugelton.github.io/Felucca/) in Chrome or Edge over USB, or [from Linux](linux-update.html#custom-firmware). You can also [try it in your browser](https://hugelton.github.io/Felucca/webapp/try/) without an FM-1.
 
+## SLOOP (custom firmware, free)
+
+[SLOOP](https://github.com/isod89/sloop-fm1) by isod89 is a live groovebox built on Felucca, with three synths and a drum track. You play it the way you'd play a sampler: hold a button, touch a key.
+
+<div class="cards">
+<a class="card" href="sloop.html" style="text-decoration:none;color:inherit"><img src="assets/sloop/beat-playing.png" alt="SLOOP tracks"><h3>SLOOP in 10 minutes →</h3><p>The layer idea, your first beat (by steps or live at your own tempo), a bassline, one-finger chords, punch-in effects, mute and solo, undo, and a song in four sections. Plus Felucca or SLOOP: which to pick.</p></a>
+</div>
+
 ## Stock firmware (M-VAVE V15)
 
 <div class="cards">

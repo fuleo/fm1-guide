@@ -5,6 +5,7 @@ markdown: kramdown
 header_pages:
   - felucca.md
   - felucca-advanced.md
+  - sloop.md
   - sequencer.md
   - reverb.md
   - linux-update.md
