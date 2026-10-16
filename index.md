@@ -7,7 +7,7 @@ Practical notes for the **M-VAVE FM-1**, the pocket 6-operator FM synth. Written
 
 ## Tutorials
 
-- **[Felucca for beginners](felucca.html):** the free 4-track custom firmware (1.5.1). The button logic, a first sound, beat and melody, saving projects, and building a song with a lane per track.
+- **[Felucca for beginners](felucca.html):** the free 4-track custom firmware (1.6.1), with screenshots. The button logic, a first sound, beat and melody, saving projects, and building a song with a lane per track.
 - **[Using the sequencer](sequencer.html):** record patterns, long notes, pattern length, Chain and voice binding, plus a 3-pattern song to build.
 - **[Getting the long reverb back after V15](reverb.html):** why the reverb tail seems to vanish after updating, and the measurements that show it.
 - **[Updating V14 → V15 from Linux](linux-update.html):** no Windows or macOS app needed.
