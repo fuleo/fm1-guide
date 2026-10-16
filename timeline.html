@@ -118,8 +118,12 @@ body.embed #embedui{display:block}
 body.embed #brand,body.embed #legend,body.embed #bar,body.embed #side,body.embed #hint,body.embed #scroller,body.embed #start{display:none}
 body.embed #clock{top:12px;right:14px} body.embed #clock .era{display:none} body.embed #clock .d{font-size:22px}
 @media (max-width:520px){ #embedui .eb{right:16px;bottom:58px} #embedui .s{display:none} }
-#start{position:fixed;inset:0;z-index:15;display:flex;align-items:center;justify-content:center;
-  background:radial-gradient(ellipse at center,rgba(5,6,11,.25),rgba(5,6,11,.88));transition:opacity .7s}
+#start{position:fixed;inset:0;z-index:15;display:flex;align-items:center;justify-content:center;pointer-events:none;
+  background:radial-gradient(ellipse at center,rgba(5,6,11,.1),rgba(5,6,11,.7));transition:opacity 1.2s}
+#soundpill{position:fixed;z-index:16;left:50%;top:92px;transform:translateX(-50%);font:600 13px "Space Grotesk";padding:10px 18px;border-radius:999px;border:0;cursor:pointer;
+  color:#08090f;background:linear-gradient(90deg,var(--mv),var(--cf));box-shadow:0 8px 30px rgba(255,79,163,.35);transition:opacity .5s}
+#soundpill.gone{opacity:0;pointer-events:none}
+body.embed #soundpill,body.listmode #soundpill{display:none}
 #start.gone{opacity:0;pointer-events:none}
 body.starting #labels,body.starting #hint{opacity:0}
 #labels{transition:opacity .6s}
@@ -195,9 +199,9 @@ body.listmode #swap{display:block}
 <div id="hint" class="hud">scroll · <b>→</b> next event · <b>space</b> autoplay</div>
 <div id="embedui" role="button" aria-label="Play the timeline full screen"><div class="eb"><div class="t">The FM-1 Story</div><div class="s">An animated 3D timeline: from a pocket synth to the firmware war</div></div><div class="pill">⤢ CLICK · FULL SCREEN WITH SOUND</div></div>
 <div id="start"><div class="box"><div class="k">3D TIMELINE · 38 EVENTS · JUN–OCT 2026</div><h2>The FM-1 Story</h2>
-<p>How a $90 pocket FM synth became 30+ instruments in under three weeks. Sit back and fly through it, with an FM soundtrack made live in your browser, or explore it yourself.</p>
-<div class="b"><button id="playsnd">▶ Play the story <span>· with sound</span></button><button id="explore">Explore on my own</button></div>
-<small>Scroll, drag or press ← → at any time to take over. Space plays and pauses.</small></div></div>
+<p>How a $90 pocket FM synth became 30+ instruments in under three weeks.</p>
+<small>Playing… scroll, drag or press ← → to take over · Space pauses</small></div></div>
+<button id="soundpill">♪ Play the soundtrack</button>
 <div id="fade"></div>
 <div id="legend" class="hud" role="group" aria-label="Filter by kind"></div>
 <div id="bar" class="hud">
@@ -567,7 +571,7 @@ async function boot(){
   function setAuto(on){
     auto = on;
     autoBtn.classList.toggle("on", on); autoBtn.textContent = on ? "❚❚ PAUSE" : "▶ AUTO";
-    if (on) { if (target >= zEnd - 2) wrapToStart(); if (!isEmbed()) Sound.start(); }
+    if (on) { if (target >= zEnd - 2) wrapToStart(); if (!isEmbed() && gestured) Sound.start(); }
     else Sound.stop();
   }
   autoBtn.onclick = () => setAuto(!auto);
@@ -593,8 +597,13 @@ async function boot(){
   const startEl = document.getElementById("start");
   function startGone(){ startEl.classList.add("gone"); document.body.classList.remove("starting"); document.getElementById("hint").style.display = "none"; }
   if (!isEmbed()) document.body.classList.add("starting");
-  document.getElementById("playsnd").onclick = () => { startGone(); Sound.setOn(true); sndLabel(); setAuto(true); };
-  document.getElementById("explore").onclick = () => startGone();
+  // autoplay starts on its own; sound needs a click (browser rule), so it waits for one
+  let gestured = false; const pill = document.getElementById("soundpill");
+  addEventListener("pointerdown", () => { gestured = true; }, { capture: true });
+  addEventListener("keydown", () => { gestured = true; }, { capture: true });
+  pill.onclick = () => { gestured = true; pill.classList.add("gone"); Sound.setOn(true); sndLabel(); if (!auto) setAuto(true); else Sound.start(); };
+  sndBtn.addEventListener("click", () => { pill.classList.add("gone"); if (auto && Sound.on) Sound.start(); });
+  if (!isEmbed()) { setAuto(true); setTimeout(startGone, 3800); }
   let fullFromEmbed = false;
   async function enterFull(){
     const el = document.documentElement; let ok = false;
