@@ -1,9 +1,10 @@
 title: M-VAVE FM-1 Guide
-description: Practical notes for the M-VAVE FM-1 pocket FM synth — sequencer, effects, Felucca for beginners, and firmware updates from Linux.
+description: Practical notes for the M-VAVE FM-1 pocket FM synth — Felucca beginner and advanced tutorials with screenshots, the stock sequencer and reverb, and firmware updates from Linux.
 theme: minima
 markdown: kramdown
 header_pages:
   - felucca.md
+  - felucca-advanced.md
   - sequencer.md
   - reverb.md
   - linux-update.md

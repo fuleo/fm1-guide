@@ -4,7 +4,7 @@ title: Update from Linux
 permalink: /linux-update.html
 ---
 
-M-VAVE ships its FM-1 updater only for Windows and macOS. This page updates the FM-1 from stock **V14 to V15 on Linux**. Both custom firmwares need V15 first.
+M-VAVE ships its FM-1 updater only for Windows and macOS. This page updates the FM-1 from stock **V14 to V15 on Linux**, then shows how to [install Felucca](#custom-firmware) the same way. Custom firmwares expect V15 first.
 
 > **Tested once:** on 2026-10-03, one FM-1 went from `FM-1_014` to `FM-1_015` on Ubuntu 22.04 (kernel 5.15, Python 3.10), first time. It's unofficial; use at your own risk.
 
@@ -55,12 +55,31 @@ done: the FM-1 runs FM-1_015
 | Embedded name | `FM-1_015` |
 | 16 KB flash head (bootloader + chip config) | Matches stock V15, the same constant Baud Girl's installer checks |
 
+## Installing Felucca from Linux {#custom-firmware}
+
+Felucca's own installer, `tools/fm1_install.py`, does the same over USB-MIDI. Take it from the **same release tag** as the package. Tested on 2026-10-11 (FM-1+VA 093 → Felucca 1.5.1) and 2026-10-16 (1.5.1 → 1.6.1).
+
+```bash
+V=1.6.1
+gh release download v$V -R hugelton/Felucca -p "felucca-$V.fwsc"
+curl -sLO "https://raw.githubusercontent.com/hugelton/Felucca/v$V/tools/fm1_install.py"
+sha256sum felucca-$V.fwsc        # compare with the web installer's copy if you like:
+curl -sL "https://hugelton.github.io/Felucca/firmware/felucca-$V.fwsc" | sha256sum
+python3 -m venv venv && venv/bin/pip install -q mido python-rtmidi
+venv/bin/python fm1_install.py --info                      # e.g. "FM-1_915  [running]"
+venv/bin/python fm1_install.py felucca-$V.fwsc --yes       # "done: the FM-1 runs FM-1_916"
+```
+
+- **Your Felucca projects stay.** Felucca's loader writes only the app area of flash (0x4000–0x93000). It never writes the bootloader region or Felucca's storage, and it checks the whole package before erasing anything.
+- **A "head differs" warning from `verify_fwsc.py` is expected for Felucca packages.** Felucca builds its own flash head, which its loader never writes. The head check only matters for stock-loader packages (M-VAVE, Baud Girl).
+- After the update, the MIDI port is named **"Felucca"** instead of "FM-1".
+
 ## Caveats
 
 - **There is no hardware recovery path.** The FM-1 has no debug header and no recovery button. If an update goes badly wrong, the only known recovery is forcing the chip's built-in USB download mode with an RP2040-based dongle.
 - **Run it detached** (the script already does), keep the computer awake, and don't unplug during the write.
 - **After the update, raise reverb decay and envelope values.** V15's 0–100 scale makes old values short; see [the reverb page](reverb.html).
-- **Felucca's installer needs `--force` for stock packages,** because it otherwise accepts only Felucca's own. The script passes it only for the verified stock file.
+- **Felucca's installer and stock packages:** older releases need `--force` for M-VAVE's file, and the script passes it only for the verified V15 file. Recent releases (checked: 1.5.1 and 1.6.1) accepts the unmodified V15 (sha256 `db1642…edb8a`) without `--force`.
 
 **Credits:**
 - [AL-255/FM-1-RE](https://github.com/AL-255/FM-1-RE): reverse-engineering of the update protocol.
