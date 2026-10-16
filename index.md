@@ -8,10 +8,11 @@ title: Home
 .hero img{width:100%;max-width:720px;height:auto;border-radius:14px;display:block}
 .hero figcaption{font-size:.85em;color:#666;margin-top:6px}
 .cards{display:flex;flex-wrap:wrap;gap:16px;margin:10px 0 24px}
-.card{flex:1 1 220px;max-width:340px;border:1px solid #e3e3e3;border-radius:12px;padding:12px;background:#fafafa}
+.card{box-sizing:border-box;flex:1 1 220px;max-width:340px;border:1px solid #e3e3e3;border-radius:12px;padding:12px;background:#fafafa}
 .card img{width:100%;height:auto;border-radius:8px;image-rendering:pixelated;display:block;margin-bottom:8px}
 .card h3{margin:0 0 6px;font-size:1.1em}
 .card p{margin:0;font-size:.92em;line-height:1.4}
+.post-content table, .page-content table{display:block;overflow-x:auto;max-width:100%}
 </style>
 
 Practical, tested guides for the **M-VAVE FM-1** pocket synth. They cover the free **Felucca** firmware, the stock firmware, and updating it all from **Linux**. Every step was tried on a real FM-1 or in the firmware's own browser version, and the screenshots are real screens.
