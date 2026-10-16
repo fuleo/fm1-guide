@@ -6,8 +6,8 @@ permalink: /felucca.html
 
 <style>
 .shots{display:flex;flex-wrap:wrap;gap:12px;margin:12px 0 18px}
-.shots figure{margin:0;flex:0 1 240px}
-.shots img{width:240px;max-width:100%;height:auto;border-radius:10px;image-rendering:pixelated;display:block}
+.shots figure{margin:0;flex:0 1 228px}
+.shots img{width:228px;max-width:100%;height:auto;border-radius:10px;image-rendering:pixelated;display:block}
 .shots figcaption{font-size:.85em;color:#666;margin-top:4px;line-height:1.3}
 </style>
 
