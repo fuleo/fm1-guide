@@ -17,10 +17,7 @@ title: Home
 
 Practical, tested guides for the **M-VAVE FM-1** pocket synth. They cover the free **Felucca** firmware, the stock firmware, and updating it all from **Linux**. Every step was tried on a real FM-1 or in an emulator running the real firmware, and the screenshots are real screens.
 
-<a href="timeline.html" style="display:block;text-decoration:none;color:inherit;margin:4px 0 22px;border-radius:14px;overflow:hidden;background:linear-gradient(110deg,#05060b 0%,#0b1630 45%,#2a0a22 100%);border:1px solid #2a2f55">
-<div style="padding:18px 20px"><div style="font:600 11px monospace;letter-spacing:.14em;color:#38d6ff">NEW · 3D TIMELINE</div>
-<div style="font-size:1.45em;font-weight:700;color:#eef1ff;margin:4px 0 4px">The FM-1 Story →</div>
-<div style="color:#b8bfe0;font-size:.95em;line-height:1.4">From the hardware's unveiling in June 2026, through M-VAVE's V09–V15 updates, to the first custom firmware and the October "firmware war": 38 milestones, with sources, flown through in 3D.</div></div></a>
+<div class="tlcard" markdown="0"><a href="timeline.html" style="display:block;text-decoration:none;color:inherit;margin:4px 0 22px;border-radius:14px;overflow:hidden;background:linear-gradient(110deg,#05060b 0%,#0b1630 45%,#2a0a22 100%);border:1px solid #2a2f55"><div style="padding:18px 20px"><div style="font:600 11px monospace;letter-spacing:.14em;color:#38d6ff">NEW · 3D TIMELINE</div><div style="font-size:1.45em;font-weight:700;color:#eef1ff;margin:4px 0 4px">The FM-1 Story →</div><div style="color:#b8bfe0;font-size:.95em;line-height:1.4">From the hardware's unveiling in June 2026, through M-VAVE's V09–V15 updates, to the first custom firmware and the October "firmware war": 38 milestones, with sources, flown through in 3D.</div></div></a></div>
 
 <figure class="hero"><img src="assets/felucca/panel.png" alt="The FM-1 panel running Felucca, drawn by Felucca's browser version"><figcaption>The FM-1 running Felucca 1.6.1: four knobs on the left, KNOB 1–4 on the right, 12 buttons and 27 keys.</figcaption></figure>
 
